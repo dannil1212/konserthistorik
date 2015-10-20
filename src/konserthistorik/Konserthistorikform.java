@@ -32,31 +32,41 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
     private void loadList() {
         konserter = new LinkedList<>();//instanseirar lista
-        Konsert tempKonsert = new Konsert(); //skapar ett objekt(konsert)
         textAreaHistory.setText(null);
+        comboBoxDelite.removeAllItems();
+        comboBoxEdit.removeAllItems();
 
         try {
             BufferedReader reader = new BufferedReader(
                     new FileReader("saveKonsert.txt"));
-
+            int räknare = 0;
             while (true) {
+                Konsert tempKonsert = new Konsert(); //skapar ett objekt(konsert)
                 String row = reader.readLine();
                 String delimiter = ", ";
-                String[] temp;
-                temp = row.split(delimiter);
+                String[] temp = row.split(delimiter);
                 tempKonsert.setBand(temp[0]);
                 tempKonsert.setPlats(temp[1]);
                 tempKonsert.setDatum(temp[2]);
                 if (row == null) {
                     break;
                 }
+                räknare++;
                 konserter.add(tempKonsert);
-                textAreaHistory.append(row+"\n");
-                
+                textAreaHistory.append(räknare + ". " + row + "\n");
+                comboBoxDelite.addItem(räknare + ". " + row);
+                comboBoxEdit.addItem(räknare + ". " + row);
             }
-
-          
         } catch (Exception e) {
+        }
+    }
+
+    private void textAreaAppend(List list) {
+        textAreaHistory.setText(null);
+        for (int i = 0; i < konserter.size(); i++) {
+            String row = (i + 1) + ". " + konserter.get(i).getBand() + ", "
+                    + konserter.get(i).getPlats() + ", " + konserter.get(i).getDatum() + "\n";
+            textAreaHistory.append(row);
         }
     }
 
@@ -65,6 +75,18 @@ public class Konserthistorikform extends javax.swing.JFrame {
             PrintWriter writer = new PrintWriter(new BufferedWriter(
                     new FileWriter("saveKonsert.txt", true)));
             writer.println(konsert);
+            writer.close();
+        } catch (Exception e) {
+        }
+    }
+
+    private void saveList(List list) {
+        try {
+            PrintWriter writer = new PrintWriter(new BufferedWriter(
+                    new FileWriter("saveKonsert.txt", false)));
+            for (int i = 0; i < konserter.size(); i++) {
+                writer.println(list.get(i));
+            }
             writer.close();
         } catch (Exception e) {
         }
@@ -90,7 +112,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
         textFieldBandAdd = new javax.swing.JTextField();
         textFieldPlaceAdd = new javax.swing.JTextField();
         textFieldDateAdd = new javax.swing.JTextField();
-        buttonAdd1 = new javax.swing.JButton();
+        buttonAdd = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -100,11 +122,9 @@ public class Konserthistorikform extends javax.swing.JFrame {
         textFieldDateEdit = new javax.swing.JTextField();
         buttonSave = new javax.swing.JButton();
         comboBoxEdit = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         buttonDelite = new javax.swing.JButton();
         comboBoxDelite = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,10 +158,10 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
         jLabel8.setText("Datum(dd/mm -åå):");
 
-        buttonAdd1.setText("Lägg till");
-        buttonAdd1.addActionListener(new java.awt.event.ActionListener() {
+        buttonAdd.setText("Lägg till");
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAdd1ActionPerformed(evt);
+                buttonAddActionPerformed(evt);
             }
         });
 
@@ -152,7 +172,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buttonAdd1)
+                    .addComponent(buttonAdd)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6)
                         .addGroup(jPanel3Layout.createSequentialGroup()
@@ -182,7 +202,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
                     .addComponent(textFieldDateAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addGap(44, 44, 44)
-                .addComponent(buttonAdd1)
+                .addComponent(buttonAdd)
                 .addContainerGap(136, Short.MAX_VALUE))
         );
 
@@ -195,38 +215,44 @@ public class Konserthistorikform extends javax.swing.JFrame {
         jLabel12.setText("Datum(dd/mm -åå):");
 
         buttonSave.setText("Spara");
+        buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSaveActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Välj index:");
+        comboBoxEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxEditActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(buttonSave)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addComponent(jLabel10)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel12))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(textFieldBandEdit)
                             .addComponent(textFieldPlaceEdit)
                             .addComponent(textFieldDateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBoxEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(136, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addGap(60, 60, 60)
+                .addComponent(comboBoxEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -241,39 +267,45 @@ public class Konserthistorikform extends javax.swing.JFrame {
                     .addComponent(textFieldDateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(buttonSave)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Redigera", jPanel4);
 
         buttonDelite.setText("Radera");
+        buttonDelite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeliteActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Välj index:");
+        comboBoxDelite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxDeliteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(92, 92, 92)
+                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonDelite)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(43, 43, 43)
+                        .addGap(93, 93, 93)
                         .addComponent(comboBoxDelite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addContainerGap(319, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxDelite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(38, 38, 38)
+                .addGap(73, 73, 73)
+                .addComponent(comboBoxDelite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
                 .addComponent(buttonDelite)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Radera", jPanel5);
@@ -292,7 +324,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAdd1ActionPerformed
+    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         Konsert testKonsert = new Konsert();
 
         testKonsert.setBand(textFieldBandAdd.getText());
@@ -303,9 +335,40 @@ public class Konserthistorikform extends javax.swing.JFrame {
         textFieldBandAdd.setText(null);
         textFieldPlaceAdd.setText(null);
         textFieldDateAdd.setText(null);
-        loadList();
-        
-    }//GEN-LAST:event_buttonAdd1ActionPerformed
+        textAreaAppend(konserter);
+    }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void comboBoxEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEditActionPerformed
+        int selectedIndex = comboBoxEdit.getSelectedIndex();
+        Konsert editKonsert = new Konsert();
+        editKonsert = konserter.get(selectedIndex);
+        textFieldBandEdit.setText(editKonsert.getBand());
+        textFieldPlaceEdit.setText(editKonsert.getPlats());
+        textFieldDateEdit.setText(editKonsert.getDatum());
+    }//GEN-LAST:event_comboBoxEditActionPerformed
+
+    private void buttonDeliteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeliteActionPerformed
+        konserter.remove(comboBoxDelite.getSelectedIndex());
+        comboBoxDelite.setName(konserter.get(0).toString());
+        saveList(konserter);
+        textAreaAppend(konserter);
+        //updateCombobox();
+    }//GEN-LAST:event_buttonDeliteActionPerformed
+
+    private void comboBoxDeliteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDeliteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxDeliteActionPerformed
+
+    private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
+        int selectedIndex = comboBoxEdit.getSelectedIndex();
+        Konsert editKonsert = new Konsert();
+        editKonsert = konserter.get(selectedIndex);
+        editKonsert.setBand(textFieldBandEdit.getText());
+        editKonsert.setPlats(textFieldPlaceEdit.getText());
+        editKonsert.setDatum(textFieldDateEdit.getText());
+        saveList(konserter);
+        textAreaAppend(konserter);
+    }//GEN-LAST:event_buttonSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,15 +406,13 @@ public class Konserthistorikform extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonAdd1;
+    private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonDelite;
     private javax.swing.JButton buttonSave;
     private javax.swing.JComboBox comboBoxDelite;
     private javax.swing.JComboBox comboBoxEdit;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
