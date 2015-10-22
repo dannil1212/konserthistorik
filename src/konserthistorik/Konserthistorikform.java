@@ -16,7 +16,8 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Daniel Nilsson
+ * @author Daniel Nilsson Detta program sparar och hanterar konserter så att man
+ * enkelt kan hålla koll på vilka konserter som man varit på.
  */
 public class Konserthistorikform extends javax.swing.JFrame {
 
@@ -45,6 +46,9 @@ public class Konserthistorikform extends javax.swing.JFrame {
                 Konsert tempKonsert = new Konsert(); //skapar ett objekt(konsert)
                 String row = reader.readLine();
                 String delimiter = ", ";
+
+                //Delar den inlästa raden i de tre olika variablerna som 
+                //objektet innehåller
                 String[] temp = row.split(delimiter);
                 tempKonsert.setBand(temp[0]);
                 tempKonsert.setPlats(temp[1]);
@@ -162,7 +166,8 @@ public class Konserthistorikform extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +211,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
                                 .addComponent(textFieldBandAdd)
                                 .addComponent(textFieldPlaceAdd)
                                 .addComponent(textFieldDateAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,7 +281,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
                             .addComponent(textFieldPlaceEdit)
                             .addComponent(textFieldDateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBoxEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,7 +333,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(93, 93, 93)
                         .addComponent(comboBoxDelite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(309, Short.MAX_VALUE))
+                .addContainerGap(319, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,9 +351,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,17 +363,26 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         Konsert testKonsert = new Konsert();
-
-        testKonsert.setBand(textFieldBandAdd.getText());
-        testKonsert.setPlats(textFieldPlaceAdd.getText());
-        testKonsert.setDatum(textFieldDateAdd.getText());
-        konserter.add(testKonsert);
-        saveKonsert(testKonsert);
-        textFieldBandAdd.setText(null);
-        textFieldPlaceAdd.setText(null);
-        textFieldDateAdd.setText(null);
-        textAreaAppend();
-        updateCombobox();
+        String tFBA = textFieldBandAdd.getText();
+        String tFPA = textFieldPlaceAdd.getText();
+        String tFDA = textFieldDateAdd.getText();
+        String compare = "";
+        if(tFBA.equalsIgnoreCase(compare) || tFPA.equalsIgnoreCase(compare)
+                || tFDA.equalsIgnoreCase(compare)){
+            JOptionPane.showMessageDialog(rootPane, "Du måste fylla i alla rutor");
+        }
+        else {
+            testKonsert.setBand(tFBA);
+            testKonsert.setPlats(tFPA);
+            testKonsert.setDatum(tFDA);
+            konserter.add(testKonsert);
+            saveKonsert(testKonsert);
+            textFieldBandAdd.setText(null);
+            textFieldPlaceAdd.setText(null);
+            textFieldDateAdd.setText(null);
+            textAreaAppend();
+            updateCombobox();
+        }
     }//GEN-LAST:event_buttonAddActionPerformed
 
     private void comboBoxEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEditActionPerformed
@@ -382,7 +394,6 @@ public class Konserthistorikform extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Det finns inga sparade konserter");
         } else {
             konserter.remove(comboBoxDelite.getSelectedIndex());
-            //comboBoxDelite.setName(konserter.get(0).toString());
             saveList();
             textAreaAppend();
             updateCombobox();
@@ -395,9 +406,17 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
     private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
         int selectedIndex = comboBoxEdit.getSelectedIndex();
+        String tFBE = textFieldBandEdit.getText();
+        String tFPE = textFieldPlaceEdit.getText();
+        String tFDE = textFieldDateEdit.getText();
+        String compare = "";
         if (selectedIndex <= -1) {
             JOptionPane.showMessageDialog(rootPane, "Ingen konsert är vald");
-        } else {
+        }
+        
+        else if (tFBE.equalsIgnoreCase(compare) || tFPE.equalsIgnoreCase(compare) || tFDE.equalsIgnoreCase(compare)) {
+            JOptionPane.showMessageDialog(rootPane, "Du måste fylla i alla rutor");
+        } else{
             Konsert editKonsert = new Konsert();
             editKonsert = konserter.get(selectedIndex);
             editKonsert.setBand(textFieldBandEdit.getText());
