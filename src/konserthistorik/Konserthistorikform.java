@@ -29,6 +29,9 @@ public class Konserthistorikform extends javax.swing.JFrame {
     public Konserthistorikform() {
         initComponents();
         loadList();
+        konserter.sort(null);
+        textAreaAppend();
+        updateCombobox();
     }
 
     //Denna funktion laddar listan från textfilen
@@ -58,9 +61,6 @@ public class Konserthistorikform extends javax.swing.JFrame {
                 }
                 räknare++;
                 konserter.add(tempKonsert);
-                textAreaHistory.append(räknare + ". " + row + "\n");
-                comboBoxDelite.addItem(räknare + ". " + row);
-                comboBoxEdit.addItem(räknare + ". " + row);
             }
         } catch (Exception e) {
         }
@@ -71,6 +71,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
     private void updateCombobox() {
         comboBoxDelite.removeAllItems();
         comboBoxEdit.removeAllItems();
+        konserter.sort(null);
         int räknare = 1;
         for (int i = 0; i < konserter.size(); i++) {
             String row = konserter.get(i).getBand() + ", "
@@ -85,6 +86,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
     //Uppdaterar textArean där alla konserter visas
     private void textAreaAppend() {
         textAreaHistory.setText(null);
+        konserter.sort(null);
         for (int i = 0; i < konserter.size(); i++) {
             String row = (i + 1) + ". " + konserter.get(i).getBand() + ", "
                     + konserter.get(i).getPlats() + ", " + konserter.get(i).getDatum() + "\n";
@@ -183,7 +185,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
         jLabel6.setText("Plats:");
 
-        jLabel8.setText("Datum(dd/mm -åå):");
+        jLabel8.setText("Datum(ååmmdd):");
 
         buttonAdd.setText("Lägg till");
         buttonAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -211,7 +213,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
                                 .addComponent(textFieldBandAdd)
                                 .addComponent(textFieldPlaceAdd)
                                 .addComponent(textFieldDateAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,7 +241,7 @@ public class Konserthistorikform extends javax.swing.JFrame {
 
         jLabel10.setText("Plats:");
 
-        jLabel12.setText("Datum(dd/mm -åå):");
+        jLabel12.setText("Datum(ååmmdd):");
 
         buttonSave.setText("Spara");
         buttonSave.addActionListener(new java.awt.event.ActionListener() {
@@ -367,11 +369,10 @@ public class Konserthistorikform extends javax.swing.JFrame {
         String tFPA = textFieldPlaceAdd.getText();
         String tFDA = textFieldDateAdd.getText();
         String compare = "";
-        if(tFBA.equalsIgnoreCase(compare) || tFPA.equalsIgnoreCase(compare)
-                || tFDA.equalsIgnoreCase(compare)){
+        if (tFBA.equalsIgnoreCase(compare) || tFPA.equalsIgnoreCase(compare)
+                || tFDA.equalsIgnoreCase(compare)) {
             JOptionPane.showMessageDialog(rootPane, "Du måste fylla i alla rutor");
-        }
-        else {
+        } else {
             testKonsert.setBand(tFBA);
             testKonsert.setPlats(tFPA);
             testKonsert.setDatum(tFDA);
@@ -412,11 +413,9 @@ public class Konserthistorikform extends javax.swing.JFrame {
         String compare = "";
         if (selectedIndex <= -1) {
             JOptionPane.showMessageDialog(rootPane, "Ingen konsert är vald");
-        }
-        
-        else if (tFBE.equalsIgnoreCase(compare) || tFPE.equalsIgnoreCase(compare) || tFDE.equalsIgnoreCase(compare)) {
+        } else if (tFBE.equalsIgnoreCase(compare) || tFPE.equalsIgnoreCase(compare) || tFDE.equalsIgnoreCase(compare)) {
             JOptionPane.showMessageDialog(rootPane, "Du måste fylla i alla rutor");
-        } else{
+        } else {
             Konsert editKonsert = new Konsert();
             editKonsert = konserter.get(selectedIndex);
             editKonsert.setBand(textFieldBandEdit.getText());

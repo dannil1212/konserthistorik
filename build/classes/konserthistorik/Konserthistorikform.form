@@ -118,7 +118,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="72" max="32767" attributes="0"/>
+                      <EmptySpace pref="83" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -160,7 +160,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Datum(dd/mm -&#xe5;&#xe5;):"/>
+                <Property name="text" type="java.lang.String" value="Datum(&#xe5;&#xe5;mmdd):"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="textFieldBandAdd">
@@ -258,7 +258,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Datum(dd/mm -&#xe5;&#xe5;):"/>
+                <Property name="text" type="java.lang.String" value="Datum(&#xe5;&#xe5;mmdd):"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="textFieldBandEdit">

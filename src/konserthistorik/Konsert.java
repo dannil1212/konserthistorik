@@ -5,15 +5,17 @@
  */
 package konserthistorik;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Daniel Nilsson
  */
-public class Konsert {
+public class Konsert implements Comparable<Konsert> {
 
     String band;
     String plats;
-    String datum;
+    int datum;
 
     public String getBand() {
         return band;
@@ -32,18 +34,36 @@ public class Konsert {
     }
 
     public String getDatum() {
-        return datum;
+        return Integer.toString(datum);
     }
 
     public void setDatum(String datum) {
-        this.datum = datum;
+        try {
+            this.datum = Integer.parseInt(datum);
+        }
+        catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Du får endast ange siffror! Datum satt till 999999");
+            this.datum = 999999;
+        }
     }
+    
 
     @Override
     public String toString() {
         return (this.getBand() + ", "
                 + this.getPlats() + ", "
                 + this.getDatum());
+    }
+
+    @Override
+    public int compareTo(Konsert k) {
+        if (datum < k.datum) {
+            return -1;
+        } else if (datum > k.datum) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 }
